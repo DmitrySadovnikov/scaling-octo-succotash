@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import QrReader from 'react-qr-reader';
+import axios from 'axios';
 
 export default class QrScanner extends Component {
   constructor(props) {
@@ -13,8 +14,17 @@ export default class QrScanner extends Component {
 
   handleScan(data) {
     if (data) {
-      this.setState({
-        result: data,
+      axios({
+        method:  'GET',
+        url:     `http://localhost:3302/meats/${data}`,
+        headers: {
+          Accept:         'application/json',
+          'Content-Type': 'application/json',
+        },
+      }).then(json => {
+        this.setState({
+          result: json.data.message,
+        });
       });
     }
   }
